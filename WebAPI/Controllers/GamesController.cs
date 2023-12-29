@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using NLog;
 using WebAPI.Models;
+using WebAPI.Models.Exceptions;
 using WebAPI.Repositories;
+using WebAPI.Services.Contracts;
 
 namespace WebAPI.Controllers
 {
@@ -11,10 +14,12 @@ namespace WebAPI.Controllers
     public class GamesController : ControllerBase
     {
         private readonly RepositoryContext _context;
+        private readonly ILoggerService _logger;
 
-        public GamesController(RepositoryContext context)
+        public GamesController(RepositoryContext context, ILoggerService logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -33,7 +38,13 @@ namespace WebAPI.Controllers
                 .SingleOrDefault();
 
             if (game is null)
-                return NotFound(); // 404
+            {
+                string message = $"The Game with id:{id} could not found.";
+                _logger.LogError(message);
+
+                //custom notfoundexception
+                throw new NotFoundException(message);
+            }
 
             return Ok(game); //200
         }
@@ -41,19 +52,13 @@ namespace WebAPI.Controllers
         [HttpPost]
         public IActionResult CreateOneGame([FromBody] Game game)
         {
-            try
-            {
-                if (game is null)
-                    return BadRequest(); //400
+            if (game is null)
+                //custom badrequestexception
+                throw new BadRequestException("Please fill the areas.");
 
-                _context.Games.Add(game);
-                _context.SaveChanges();
-                return StatusCode(201, game); //201 
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message); //500
-            }
+            _context.Games.Add(game);
+            _context.SaveChanges();
+            return StatusCode(201, game); //201 
         }
 
         [HttpPut("{id:int}")]
@@ -61,84 +66,101 @@ namespace WebAPI.Controllers
             [FromBody] Game game)
         {
 
-            try
+            var entity = _context
+            .Games
+            .Where(b => b.Id.Equals(id))    
+            .SingleOrDefault();
+
+            if (entity is null)
             {
-                var entity = _context
-                .Games
-                .Where(b => b.Id.Equals(id))
-                .SingleOrDefault();
+                string message = $"The Game with id:{id} could not found.";
+                _logger.LogError(message);
 
-                if (entity is null)
-                    return NotFound(); //404
-
-                if (id != game.Id)
-                    return BadRequest(); //400
-
-                entity.Title = game.Title;
-                entity.Price = game.Price;
-
-                _context.SaveChanges();
-                return Ok(game); //200
+                //custom notfoundexception
+                throw new NotFoundException(message);
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            if (id != game.Id)
+                //custom badrequestexception
+                throw new BadRequestException("ID's do not match.");
+
+            entity.Title = game.Title;
+            entity.Price = game.Price;
+
+            _context.SaveChanges();
+            _logger.LogInfo($"The Game with id:{id} updated");
+            return Ok(game); //200
         
         }
 
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteAllGames([FromRoute(Name = "id")] int id)
+        public IActionResult DeleteOneGame([FromRoute(Name = "id")] int id)
         {
-            try
+            var entity = _context
+                .Games
+                .Where(b => b.Id.Equals(id))
+                .SingleOrDefault();
+
+            if (entity is null)
             {
-                var entity = _context
-                    .Games
-                    .Where(b => b.Id.Equals(id))
-                    .SingleOrDefault();
+                string message = $"The Game with id:{id} could not found.";
+                _logger.LogError(message);
 
-                if(entity is null)
-                    return NotFound(new
-                    {
-                        statusCode = 404,
-                        message = $"The game with id:{id} could not found."
-                    }); //404
-
-                _context.Games.Remove(entity);
-                _context.SaveChanges();
-
-                return NoContent(); //204
+                //custom notfoundexception
+                throw new NotFoundException(message);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message); //500
-            }
+
+            _context.Games.Remove(entity);
+            _context.SaveChanges();
+
+            _logger.LogInfo($"The Game with id:{id} deleted");
+            return NoContent(); //204
         }
 
         [HttpPatch("{id:int}")]
         public IActionResult PartiallyUpdateOneGame([FromRoute(Name = "id")] int id,
             [FromBody] JsonPatchDocument<Game> gamePatch)
         {
+
+            // check entity
+            var entity = _context
+                .Games
+                .Where(b => b.Id.Equals(id))
+                .SingleOrDefault();
+
+            if (entity is null)
+            {
+                string message = $"The Game with id:{id} could not found.";
+                _logger.LogError(message);
+
+                //custom notfoundexception
+                throw new NotFoundException(message);
+            }
+
+            gamePatch.ApplyTo(entity);
+            _context.SaveChanges();
+
+            return NoContent(); // 204
+
+        }
+        /*
+        [HttpGet("List")]
+        public IActionResult ListProducts([FromQuery] string title)
+        {
             try
             {
-                // check entity
-                var entity = _context
-                    .Games
-                    .Where(b => b.Id.Equals(id))
-                    .SingleOrDefault();
+                var filteredEntity = _context.Games.Where(b => b.Title.Contains(title)).ToList();
 
-                if (entity is null)
-                    return NotFound(); // 404
+                if (filteredEntity is null)
+                    return NotFound();//404
 
-                gamePatch.ApplyTo(entity);
-                _context.SaveChanges();
-
-                return NoContent(); // 204
+                return Ok(filteredEntity);//200
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return StatusCode(500, ex.Message);
             }
-        }
+            
+        }*/
     }
 }
