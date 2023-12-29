@@ -229,3 +229,11 @@ File name: 'NLog.Web.AspNetCore, Culture=neutral, PublicKeyToken=null'
 2023-12-29 13:01:40.3472 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.7.2287. Product version: 5.2.7+a1ef7cd83b5a6a172142a6850f0ced4e759a4b3b. GlobalAssemblyCache: False
 2023-12-29 13:01:40.3472 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\msi-nb\source\repos\erencalbay\Akbank.NetRepo\WebAPI\nlog.config
 2023-12-29 13:01:40.3726 Info Configuration initialized.
+2023-12-29 13:31:15.1336 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-12-29 13:31:15.1548 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.7.2287. Product version: 5.2.7+a1ef7cd83b5a6a172142a6850f0ced4e759a4b3b. GlobalAssemblyCache: False
+2023-12-29 13:31:15.1649 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\msi-nb\source\repos\erencalbay\Akbank.NetRepo\WebAPI\nlog.config
+2023-12-29 13:31:15.1759 Info Configuration initialized.
+2023-12-29 13:31:34.8393 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-12-29 13:31:34.8687 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.7.2287. Product version: 5.2.7+a1ef7cd83b5a6a172142a6850f0ced4e759a4b3b. GlobalAssemblyCache: False
+2023-12-29 13:31:34.8812 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\msi-nb\source\repos\erencalbay\Akbank.NetRepo\WebAPI\nlog.config
+2023-12-29 13:31:34.8947 Info Configuration initialized.
