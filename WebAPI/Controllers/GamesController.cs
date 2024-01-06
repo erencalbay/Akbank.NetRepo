@@ -3,9 +3,17 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using WebAPI.Models;
+using WebAPI.Models.BookOperations.CreateOneGame;
+using WebAPI.Models.BookOperations.GetGames;
+using WebAPI.Models.BookOperations.GetOneGame;
+using WebAPI.Models.BookOperations.UpdateOneGame;
 using WebAPI.Models.Exceptions;
+using WebAPI.Models.GameOperations.DeleteOneGame;
 using WebAPI.Repositories;
 using WebAPI.Services.Contracts;
+using static WebAPI.Models.BookOperations.CreateOneGame.CreateOneGameCommand;
+using static WebAPI.Models.BookOperations.GetOneGame.GetOneGameCommand;
+using static WebAPI.Models.BookOperations.UpdateOneGame.UpdateOneGameCommand;
 
 namespace WebAPI.Controllers
 {
@@ -25,98 +33,53 @@ namespace WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAllGames()
         {
-            var games = _context.Games.ToList();
-            return Ok(games); //200
+            //vm
+            GetGamesQuery query = new GetGamesQuery(_context);
+            var result = query.Handle();
+            return Ok(result);
         }
 
-        [HttpGet("GetOneGame")]
-        public IActionResult GetOneGame([FromQuery] int id)
+        [HttpGet("{id}")]
+        public IActionResult GetOneGame(int id)
         {
-            var game = _context
-                .Games
-                .Where(b => b.Id.Equals(id))
-                .SingleOrDefault();
-
-            if (game is null)
-            {
-                string message = $"The Game with id:{id} could not found.";
-                _logger.LogError(message);
-
-                //custom notfoundexception
-                throw new NotFoundException(message);
-            }
-
-            return Ok(game); //200
+            GetOneGameCommand command = new GetOneGameCommand(_context, _logger);
+            command.GameId = id;            
+            var result = command.Handle();
+            return Ok(result); //200
         }
 
         [HttpPost]
-        public IActionResult CreateOneGame([FromBody] Game game)
+        public IActionResult CreateOneGame([FromBody] CreateOneGameModel game)
         {
-            if (game is null)
-                //custom badrequestexception
-                throw new BadRequestException("Please fill the areas.");
-
-            _context.Games.Add(game);
-            _context.SaveChanges();
+            CreateOneGameCommand command = new CreateOneGameCommand(_context);
+            command.Model = game;
+            command.Handle();
             return StatusCode(201, game); //201 
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult UpdateOneGame([FromRoute(Name = "id")] int id,
-            [FromBody] Game game)
+        public IActionResult UpdateOneGame(int id, [FromBody] UpdateOneGameModel updatedGame)
         {
-
-            var entity = _context
-            .Games
-            .Where(b => b.Id.Equals(id))    
-            .SingleOrDefault();
-
-            if (entity is null)
-            {
-                string message = $"The Game with id:{id} could not found.";
-                _logger.LogError(message);
-
-                //custom notfoundexception
-                throw new NotFoundException(message);
-            }
-
-            if (id != game.Id)
-                //custom badrequestexception
-                throw new BadRequestException("ID's do not match.");
-
-            entity.Title = game.Title;
-            entity.Price = game.Price;
+            UpdateOneGameCommand command = new UpdateOneGameCommand(_context, _logger);
+            command.GameId = id;
+            command.Model = updatedGame;
+            command.Handle();
 
             _context.SaveChanges();
-            _logger.LogInfo($"The Game with id:{id} updated");
-            return Ok(game); //200
+            return Ok(command.Model); //200
         
         }
 
-        [HttpDelete("{id:int}")]
-        public IActionResult DeleteOneGame([FromRoute(Name = "id")] int id)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteOneGame(int id)
         {
-            var entity = _context
-                .Games
-                .Where(b => b.Id.Equals(id))
-                .SingleOrDefault();
-
-            if (entity is null)
-            {
-                string message = $"The Game with id:{id} could not found.";
-                _logger.LogError(message);
-
-                //custom notfoundexception
-                throw new NotFoundException(message);
-            }
-
-            _context.Games.Remove(entity);
-            _context.SaveChanges();
-
-            _logger.LogInfo($"The Game with id:{id} deleted");
+            DeleteOneGameCommand command = new DeleteOneGameCommand(_context, _logger);
+            command.GameId = id;
+            command.Handle();
             return NoContent(); //204
         }
 
+        //todo: vm 
         [HttpPatch("{id:int}")]
         public IActionResult PartiallyUpdateOneGame([FromRoute(Name = "id")] int id,
             [FromBody] JsonPatchDocument<Game> gamePatch)
