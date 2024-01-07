@@ -4,6 +4,10 @@ using WebAPI.Repositories;
 using WebAPI.Services;
 using WebAPI.Services.Contracts;
 using WebAPI.Services.ErrorHandler;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using Microsoft.AspNetCore.Identity;
+using WebAPI.Models.GameOperations.CreateOneGame;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +20,9 @@ builder.Services.AddControllers()
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddControllers();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
 
 
 builder.Services.AddDbContext<RepositoryContext>(options =>
