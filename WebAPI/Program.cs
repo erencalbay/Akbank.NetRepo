@@ -23,6 +23,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddAutoMapper(typeof(Program));
 
 
 builder.Services.AddDbContext<RepositoryContext>(options =>
