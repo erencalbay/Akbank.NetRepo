@@ -13,6 +13,7 @@ namespace WebAPI.Repositories
         }
         public DbSet<Game> Games { get; set; }
         public DbSet<Genres> Genres { get; set; }
+        public DbSet<Author> Author { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

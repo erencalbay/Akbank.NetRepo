@@ -82,7 +82,7 @@ namespace WebAPI.Controllers
             command.GenreId = id;
             command.Model = updatedGenre;
             //validator
-            UpdateGameCommandValidator validator = new UpdateGameCommandValidator();
+            UpdateGenreCommandValidator validator = new UpdateGenreCommandValidator();
             validator.Validate(command);
 
             command.Handle();

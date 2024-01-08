@@ -485,3 +485,19 @@ File name: 'NLog.Web.AspNetCore, Culture=neutral, PublicKeyToken=null'
 2024-01-09 01:05:51.2329 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.7.2287. Product version: 5.2.7+a1ef7cd83b5a6a172142a6850f0ced4e759a4b3b. GlobalAssemblyCache: False
 2024-01-09 01:05:51.2329 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\msi-nb\source\repos\erencalbay\Akbank.NetRepo\WebAPI\nlog.config
 2024-01-09 01:05:51.2501 Info Configuration initialized.
+2024-01-09 02:42:16.0957 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-01-09 02:42:16.0957 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.7.2287. Product version: 5.2.7+a1ef7cd83b5a6a172142a6850f0ced4e759a4b3b. GlobalAssemblyCache: False
+2024-01-09 02:42:16.1104 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\msi-nb\source\repos\erencalbay\Akbank.NetRepo\WebAPI\nlog.config
+2024-01-09 02:42:16.1104 Info Configuration initialized.
+2024-01-09 02:42:16.9480 Info AppDomain Shutting down. LogFactory closing...
+2024-01-09 02:42:16.9661 Info LogFactory has been closed.
+2024-01-09 02:42:26.2514 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-01-09 02:42:26.2514 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.7.2287. Product version: 5.2.7+a1ef7cd83b5a6a172142a6850f0ced4e759a4b3b. GlobalAssemblyCache: False
+2024-01-09 02:42:26.2657 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\msi-nb\source\repos\erencalbay\Akbank.NetRepo\WebAPI\nlog.config
+2024-01-09 02:42:26.2657 Info Configuration initialized.
+2024-01-09 02:42:26.9387 Info AppDomain Shutting down. LogFactory closing...
+2024-01-09 02:42:26.9387 Info LogFactory has been closed.
+2024-01-09 02:43:37.5561 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-01-09 02:43:37.5770 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.7.2287. Product version: 5.2.7+a1ef7cd83b5a6a172142a6850f0ced4e759a4b3b. GlobalAssemblyCache: False
+2024-01-09 02:43:37.5770 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\msi-nb\source\repos\erencalbay\Akbank.NetRepo\WebAPI\nlog.config
+2024-01-09 02:43:37.5941 Info Configuration initialized.

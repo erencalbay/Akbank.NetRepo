@@ -18,11 +18,11 @@ namespace WebAPI.Models.GenreOperations.CreateGenre
         public void Handle()
         {
             var genre = _context.Genres.SingleOrDefault(x => x.Name == Model.Name);
-            if (genre is null)
+            if (genre is not null)
             {
-                string message = $"The genre with Name:{Model.Name} could not found.";
+                string message = "Genre is already exists";
                 _logger.LogError(message);
-                throw new NotFoundException(message);
+                throw new InvalidOperationException(message);
             }
 
             genre = new Genres();
